@@ -1,0 +1,31 @@
+# ========== ANDROID STUDIO / INTELLIJ IDEA ==========
+.idea/                 # IDE-specific configs
+*.iml                  # Module files
+
+# ========== GRADLE ==========
+.gradle/               # Gradle caches
+/local.properties      # Contains local SDK path
+/build/                # Top-level build folder
+**/build/              # All module build folders
+captures/              # Captured screenshots
+.externalNativeBuild/  # CMake/NdkBuild output
+
+# ========== OS-SPECIFIC ==========
+.DS_Store              # macOS
+Thumbs.db              # Windows
+
+# ========== KEYSTORES ==========
+*.jks                  # Keystore (debug/release)
+
+# ========== LOGS / REPORTS ==========
+*.log                  # Log files
+crashlytics/           # Firebase crashlytics (optional)
+*.zip                  # Zipped files (optional)
+
+# ========== FIREBASE ==========
+google-services.json   # Firebase config (should not be uploaded)
+
+# ========== OTHER ==========
+/*.apk                 # Built APKs
+*.tmp                  # Temporary files
+*.bak                  # Backup files
