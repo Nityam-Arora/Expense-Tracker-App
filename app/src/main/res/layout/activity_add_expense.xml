@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!--<?xml version="1.0" encoding="utf-8"?>-->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -57,12 +57,13 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="30dp"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="30dp"
                 >
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/addAmount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="₹ "
                     android:inputType="number"
                     android:textColor="@color/black"
                     android:textStyle="bold"
@@ -86,7 +87,7 @@
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
                 app:layout_constraintTop_toBottomOf="@+id/addAmountLayout"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="30dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginStart="30dp"
@@ -116,7 +117,7 @@
                 app:boxBackgroundMode="filled"
                 app:boxStrokeWidth="0dp"
                 app:layout_constraintTop_toBottomOf="@+id/addCategoryLayout"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="30dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginStart="30dp"
@@ -124,6 +125,40 @@
                 >
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/addDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:clickable="true"
+                    android:inputType="none"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="22sp"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+<!--            Add Time -->
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/addTimeLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:hint="Select Time"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxBackgroundMode="filled"
+                app:boxStrokeWidth="0dp"
+                app:layout_constraintTop_toBottomOf="@+id/addDateLayout"
+                android:layout_marginTop="30dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/addTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
@@ -144,12 +179,15 @@
                 android:hint="Description"
                 app:boxBackgroundMode="filled"
                 app:boxStrokeWidth="0dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="50"
+                app:counterTextColor="@color/black"
                 app:boxCornerRadiusTopEnd="12dp"
                 app:boxCornerRadiusTopStart="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusBottomEnd="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/addDateLayout"
-                android:layout_marginTop="40dp"
+                app:layout_constraintTop_toBottomOf="@+id/addTimeLayout"
+                android:layout_marginTop="30dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginStart="30dp"
@@ -162,6 +200,7 @@
                     android:textSize="22sp"
                     android:textStyle="bold"
                     android:textColor="@color/black"
+                    android:maxLength="50"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -177,7 +216,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/saveButton"
                 android:layout_marginStart="30dp"
-                android:layout_marginEnd="15dp"
+                android:layout_marginEnd="11dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="30dp"/>
 
@@ -190,7 +229,7 @@
                 android:textSize="22sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/cancelButton"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginEnd="30dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="30dp"/>

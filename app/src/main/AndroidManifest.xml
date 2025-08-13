@@ -14,10 +14,14 @@
         android:theme="@style/Theme.ExpenseTrackerApp">
         <activity
             android:name=".ExpenseOverviewActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".AddExpenseActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".HomeActivity"
             android:exported="true"

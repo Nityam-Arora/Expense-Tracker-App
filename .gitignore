@@ -1,31 +1,50 @@
 # ========== ANDROID STUDIO / INTELLIJ IDEA ==========
-.idea/                 # IDE-specific configs
-*.iml                  # Module files
+.idea/
+*.iml
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+.idea/gradle.xml
 
 # ========== GRADLE ==========
-.gradle/               # Gradle caches
-/local.properties      # Contains local SDK path
-/build/                # Top-level build folder
-**/build/              # All module build folders
-captures/              # Captured screenshots
-.externalNativeBuild/  # CMake/NdkBuild output
+.gradle/
+gradle-wrapper.jar
+/local.properties
+/build/
+/**/build/
+captures/
+.externalNativeBuild/
 
 # ========== OS-SPECIFIC ==========
-.DS_Store              # macOS
-Thumbs.db              # Windows
+.DS_Store
+Thumbs.db
 
 # ========== KEYSTORES ==========
-*.jks                  # Keystore (debug/release)
+*.jks
 
 # ========== LOGS / REPORTS ==========
-*.log                  # Log files
-crashlytics/           # Firebase crashlytics (optional)
-*.zip                  # Zipped files (optional)
+*.log
+*.zip
 
 # ========== FIREBASE ==========
-google-services.json   # Firebase config (should not be uploaded)
+google-services.json
 
 # ========== OTHER ==========
-/*.apk                 # Built APKs
-*.tmp                  # Temporary files
-*.bak                  # Backup files
+*.apk
+*.ap_
+*.dex
+*.class
+*.tmp
+*.bak
+*.swp
+*.swo
+*.orig
+*.kts~
+
+# ========== CRASHLYTICS / FABRIC (Optional) ==========
+fabric.properties
+crashlytics/
+crashlytics.properties 
