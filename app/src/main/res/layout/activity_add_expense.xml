@@ -45,6 +45,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:hint="Amount"
+                android:textColorHint="#404040"
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusTopStart="12dp"
@@ -180,7 +181,7 @@
                 app:boxBackgroundMode="filled"
                 app:boxStrokeWidth="0dp"
                 app:counterEnabled="true"
-                app:counterMaxLength="50"
+                app:counterMaxLength="30"
                 app:counterTextColor="@color/black"
                 app:boxCornerRadiusTopEnd="12dp"
                 app:boxCornerRadiusTopStart="12dp"
@@ -200,7 +201,7 @@
                     android:textSize="22sp"
                     android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:maxLength="50"
+                    android:maxLength="30"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 

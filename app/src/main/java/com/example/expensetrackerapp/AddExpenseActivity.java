@@ -2,7 +2,6 @@ package com.example.expensetrackerapp;
 
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.os.ParcelFormatException;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -11,7 +10,6 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.versionedparcelable.VersionedParcel;
 
 import com.example.expensetrackerapp.Database.Expense.ExpenseEntity;
 import com.example.expensetrackerapp.Database.Expense.ExpenseViewModel;
@@ -26,12 +24,26 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
+/**
+ * Activity for adding a new expense record.
+ *
+ * Features:
+ * - Select category from a predefined dropdown list
+ * - Pick date (disallows future dates)
+ * - Pick time (only shown if expense date is not today)
+ * - Enter amount, description
+ * - Saves expense in DB with normalized date (yyyy-MM-dd) and time (HH:mm:ss)
+ */
 public class AddExpenseActivity extends AppCompatActivity {
 
-    private final SimpleDateFormat uiFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-    private final SimpleDateFormat dbFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    // Date formats: UI vs Database
+    private final SimpleDateFormat uiDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+    private final SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+    // Time formats: UI vs Database
+    private final SimpleDateFormat uiFormatTime = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+    private final SimpleDateFormat dbFormatTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +51,7 @@ public class AddExpenseActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_expense);
 
-        //<editor-fold desc = "Views">
-
+        // ----------------------- View References -----------------------
         EditText addAmount = findViewById(R.id.addAmount);
         EditText addDate = findViewById(R.id.addDate);
         EditText addDescription = findViewById(R.id.addDescription);
@@ -48,48 +59,40 @@ public class AddExpenseActivity extends AppCompatActivity {
 
         MaterialAutoCompleteTextView addCategory = findViewById(R.id.addCategory);
         MaterialButton saveButton = findViewById(R.id.saveButton);
-        MaterialButton cancleButton = findViewById(R.id.cancelButton);
-
+        MaterialButton cancelButton = findViewById(R.id.cancelButton);
         TextInputLayout addTimeLayout = findViewById(R.id.addTimeLayout);
 
+        // Hide time picker by default; will show if user selects a past date
         addTimeLayout.setVisibility(View.GONE);
 
-        //</editor-fold>
-
-        // <editor-fold desc = "Categories">
-
-        String[] Categories = new String[] {
-                "Food","Transport","Shopping","Bills","Entertainment","Medical","Rent","Other"
+        // ----------------------- Category Dropdown -----------------------
+        String[] categories = new String[]{
+                "Food", "Transport", "Shopping", "Bills",
+                "Entertainment", "Medical", "Rent", "Other"
         };
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item,
-                Categories);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_dropdown_item, categories
+        );
+
         addCategory.setAdapter(adapter);
-        addCategory.setText("Food", false);
-        addCategory.setKeyListener(null);
-        addCategory.setOnItemClickListener((parent, view, position, id) -> {
-            String SelectedCategory = parent.getItemAtPosition(position).toString();
-        });
+        addCategory.setText("Food", false); // default selection
+        addCategory.setKeyListener(null);   // make dropdown non-editable
 
-        // </editor-fold>
-
-        // <editor-fold desc = "Date">
-
-        String currentDate = uiFormat.format(new Date());
+        // ----------------------- Date Picker -----------------------
+        String currentDate = uiDateFormat.format(new Date());
         addDate.setText(currentDate);
 
         Calendar calendar = Calendar.getInstance();
         long todayMillis = calendar.getTimeInMillis();
 
         addDate.setOnClickListener(v -> {
-
             MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
                     .setTitleText("Select Date")
-                    .setSelection(todayMillis) // default selection = today
+                    .setSelection(todayMillis) // default = today
                     .setCalendarConstraints(
                             new CalendarConstraints.Builder()
-                                    .setEnd(todayMillis) // restrict to today or earlier
+                                    .setEnd(todayMillis) // prevent future dates
                                     .build()
                     )
                     .build();
@@ -97,114 +100,115 @@ public class AddExpenseActivity extends AppCompatActivity {
             datePicker.show(getSupportFragmentManager(), "Material_Date_Picker");
 
             datePicker.addOnPositiveButtonClickListener(selection -> {
-
-                if (selection > todayMillis){
+                if (selection > todayMillis) {
                     Toast.makeText(this, "Cannot select future dates", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                String formattedDate = uiFormat.format(new Date(selection));
+                String formattedDate = uiDateFormat.format(new Date(selection));
                 addDate.setText(formattedDate);
 
-                String todayDate = uiFormat.format(new Date(todayMillis));
+                // Show/hide time picker based on date
+                String todayDate = uiDateFormat.format(new Date(todayMillis));
                 if (formattedDate.equals(todayDate)) {
                     addTimeLayout.setVisibility(View.GONE);
+                    addTime.setText(uiFormatTime.format(new Date())); // reset to current time
                 } else {
                     addTimeLayout.setVisibility(View.VISIBLE);
                 }
             });
         });
 
-        // </editor-fold>
+        // ----------------------- Time Picker -----------------------
+        // Default: Current time in hh:mm a format
+        addTime.setText(uiFormatTime.format(new Date()));
 
-        // <editor-fold desc = "Time">
+        addTime.setOnClickListener(v -> {
+            Calendar cal = Calendar.getInstance();
+            int hour = cal.get(Calendar.HOUR_OF_DAY);
+            int minute = cal.get(Calendar.MINUTE);
 
-        addTime.setText(new SimpleDateFormat("hh:mm a", Locale.getDefault()).format(new Date()));
+            TimePickerDialog timePickerDialog = new TimePickerDialog(
+                    AddExpenseActivity.this,
+                    (view, selectedHour, selectedMinute) -> {
+                        Calendar selectedTime = Calendar.getInstance();
+                        selectedTime.set(Calendar.HOUR_OF_DAY, selectedHour);
+                        selectedTime.set(Calendar.MINUTE, selectedMinute);
 
-        addTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar cal = Calendar.getInstance();
-                int hour = cal.get(Calendar.HOUR_OF_DAY);
-                int minute = cal.get(Calendar.MINUTE);
+                        // Show in UI format
+                        addTime.setText(uiFormatTime.format(selectedTime.getTime()));
+                    },
+                    hour, minute, false // false = 12-hour format
+            );
 
-                TimePickerDialog timePickerDialog = new TimePickerDialog(
-                        AddExpenseActivity.this,
-                        (view, selectedHour, selectedMinute) -> {
-                            // Format to 12-hour with AM/PM
-                            Calendar selectedTime = Calendar.getInstance();
-                            selectedTime.set(Calendar.HOUR_OF_DAY, selectedHour);
-                            selectedTime.set(Calendar.MINUTE, selectedMinute);
-
-                            SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
-                            addTime.setText(timeFormat.format(selectedTime.getTime()));
-                        },
-                        hour, minute, false // false = 12-hour format
-                );
-
-                timePickerDialog.show();
-            }
+            timePickerDialog.show();
         });
 
-        // </editor-fold>
-
-        // <editor-fold desc = "Save button">
-
+        // ----------------------- Save Button -----------------------
         saveButton.setOnClickListener(v -> {
-            String amount = addAmount.getText().toString().replace("₹","").trim();
+            // Collect user input
+            String amount = addAmount.getText().toString().replace("₹", "").trim();
             String category = addCategory.getText().toString().trim();
             String uiDate = addDate.getText().toString().trim();
             String description = addDescription.getText().toString().trim();
+            String uiTime = addTime.getText().toString().trim();
 
-            String time = addTime.getText().toString().trim();
-
+            // ---------------- Validation ----------------
             if (amount.isEmpty()) {
-                Toast.makeText(AddExpenseActivity.this, "Please enter Amount", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please enter Amount", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Convert string to integer for amount
             int amountInt;
             try {
                 amountInt = Integer.parseInt(amount);
+                if (amountInt <= 0) {
+                    Toast.makeText(this, "Amount must be greater than 0", Toast.LENGTH_SHORT).show();
+                    return;
+                }
             } catch (NumberFormatException e) {
-                Toast.makeText(AddExpenseActivity.this, "Invalid amount", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Invalid amount", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Convert UI date to DB date format (yyyy-MM-dd)
+            // Convert date from UI → DB format
             String dbDate;
             try {
-                Date parsedDate = uiFormat.parse(uiDate);
-                dbDate = dbFormat.format(parsedDate);
+                Date parsedDate = uiDateFormat.parse(uiDate);
+                dbDate = dbDateFormat.format(parsedDate);
             } catch (ParseException e) {
-                Toast.makeText(AddExpenseActivity.this, "Invalid date format", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Invalid date format", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            ExpenseEntity expense = new ExpenseEntity(dbDate, time, category, amountInt, description);
+            // Convert time from UI → DB format
+            String dbTime;
+            try {
+                Date parsedTime = uiFormatTime.parse(uiTime);
+                dbTime = dbFormatTime.format(parsedTime);
+            } catch (ParseException e) {
+                Toast.makeText(this, "Invalid time format", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-            // Get ViewModel and insert
+            // ---------------- Create ExpenseEntity ----------------
+            ExpenseEntity expense = new ExpenseEntity(dbDate, dbTime, category, amountInt, description);
+
+            // Insert into DB via ViewModel
             ExpenseViewModel viewModel = new ViewModelProvider(
-                    AddExpenseActivity.this,
+                    this,
                     ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication())
             ).get(ExpenseViewModel.class);
             viewModel.insert(expense);
 
-            Toast.makeText(AddExpenseActivity.this, "Expense Saved", Toast.LENGTH_SHORT).show();
-            finish(); // Go back to previous activity
+            Toast.makeText(this, "Expense Saved", Toast.LENGTH_SHORT).show();
+            finish(); // Close activity
         });
 
-        // </editor-fold>
-
-        // <editor-fold desc = "Cancel button">
-
-        cancleButton.setOnClickListener(v -> {
+        // ----------------------- Cancel Button -----------------------
+        cancelButton.setOnClickListener(v -> {
+            Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
             finish();
-            Toast.makeText(AddExpenseActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
         });
-
-        // </editor-fold>
-
     }
 }

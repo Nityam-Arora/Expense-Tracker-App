@@ -16,6 +16,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+/**
+ * Activity for Managing Fragments.
+ *
+ * Features:
+ * - Three fragments (Daily, Weekly, Monthly).
+ * - Allows navigating between fragments.
+ */
+
 public class ExpenseOverviewActivity extends AppCompatActivity {
 
     @Override
