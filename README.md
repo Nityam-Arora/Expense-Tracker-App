@@ -1,4 +1,4 @@
-# Expense Tracker App
+# BACHAT BUDDY
 
 A personal finance tracker built with Java, Room Database, and Material Design in Android Studio.
 
@@ -6,7 +6,7 @@ A personal finance tracker built with Java, Room Database, and Material Design i
 
 ## 📱 Overview
 
-The **Expense Tracker App** assists users in monitoring and managing their daily expenses efficiently. It offers a user-friendly interface with the following features:
+The **BACHAT BUDDY** assists users in monitoring and managing their daily expenses efficiently. It offers a user-friendly interface with the following features:
 
 - **Budget Management**: Set and track your budget.
 - **Expense Tracking**: Record and categorize your expenses.
@@ -70,12 +70,6 @@ The **Expense Tracker App** assists users in monitoring and managing their daily
 - You can also [download the APK from Releases](https://github.com/Nityam-Arora/Expense-Tracker-App/releases/tag/v1.2.0)
 
   
----
-
-## 📌 Notes
-
-- This project is still under development. Some features may be incomplete, and bugs may exist. Updates and improvements are planned for future versions.
-
 ---
 
 ## 📄 License
