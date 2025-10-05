@@ -5,6 +5,8 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import java.util.List;
+
 /**
  * DAO (Data Access Object) for BudgetEntity.
  * Defines database operations related to budgets.
@@ -43,4 +45,7 @@ public interface BudgetDao {
      */
     @Query("SELECT * FROM budget ORDER BY id DESC LIMIT 1")
     int getLatestBudgetId();
+
+    @Query("SELECT * FROM budget ORDER BY id DESC")
+    LiveData<List<BudgetEntity>> getAllBudget();
 }

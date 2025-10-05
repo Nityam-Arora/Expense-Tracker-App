@@ -75,17 +75,17 @@ public class ExpenseRepository {
     }
 
     /** Returns LiveData of this week's expenses */
-    public LiveData<List<ExpenseEntity>> getWeeklyExpenses() {
-        return expenseDao.getWeeklyExpenses();
+    public LiveData<List<ExpenseEntity>> getWeeklyExpenses(String startDate, String endDate) {
+        return expenseDao.getWeeklyExpenses(startDate, endDate);
     }
 
     /** Returns LiveData of this month's expenses */
-    public LiveData<List<ExpenseEntity>> getMonthlyExpenses() {
-        return expenseDao.getMonthlyExpenses();
+    public LiveData<List<ExpenseEntity>> getMonthlyExpenses(String startDate, String endDate) {
+        return expenseDao.getMonthlyExpenses(startDate, endDate);
     }
 
     /** Returns LiveData of total expenses grouped by category */
-    public LiveData<List<ExpenseDao.CategoryTotal>> getCategoryTotal() {
-        return expenseDao.getCategoryTotal();
+    public LiveData<List<ExpenseDao.CategoryTotal>> getCategoryTotal(String startDate, String endDate) {
+        return expenseDao.getCategoryTotal(startDate, endDate);
     }
 }

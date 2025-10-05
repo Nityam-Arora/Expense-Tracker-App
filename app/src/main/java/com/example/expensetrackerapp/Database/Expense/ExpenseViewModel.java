@@ -70,23 +70,23 @@ public class ExpenseViewModel extends AndroidViewModel {
      * Get LiveData of this week's expenses
      * @return LiveData list of weekly ExpenseEntity
      */
-    public LiveData<List<ExpenseEntity>> getWeeklyExpenses() {
-        return repository.getWeeklyExpenses();
+    public LiveData<List<ExpenseEntity>> getWeeklyExpenses(String startDate, String endDate) {
+        return repository.getWeeklyExpenses(startDate, endDate);
     }
 
     /**
      * Get LiveData of this month's expenses
      * @return LiveData list of monthly ExpenseEntity
      */
-    public LiveData<List<ExpenseEntity>> getMonthlyExpenses() {
-        return repository.getMonthlyExpenses();
+    public LiveData<List<ExpenseEntity>> getMonthlyExpenses(String startDate, String endDate) {
+        return repository.getMonthlyExpenses(startDate, endDate);
     }
 
     /**
      * Get LiveData of total expenses grouped by category
      * @return LiveData list of ExpenseDao.CategoryTotal
      */
-    public LiveData<List<ExpenseDao.CategoryTotal>> getCategoryTotal() {
-        return repository.getCategoryTotal();
+    public LiveData<List<ExpenseDao.CategoryTotal>> getCategoryTotal(String startDate, String endDate) {
+        return repository.getCategoryTotal(startDate, endDate);
     }
 }

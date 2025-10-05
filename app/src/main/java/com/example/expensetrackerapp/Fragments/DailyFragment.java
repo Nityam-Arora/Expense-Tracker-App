@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,12 @@ import android.widget.TextView;
 import com.example.expensetrackerapp.Adapters.ExpenseOverviewAdapter;
 import com.example.expensetrackerapp.Database.Expense.ExpenseViewModel;
 import com.example.expensetrackerapp.R;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -37,7 +41,9 @@ public class DailyFragment extends Fragment {
     ExpenseViewModel expenseViewModel;  // ViewModel to fetch data from database
     ExpenseOverviewAdapter adapter;     // Adapter to bind expenses to RecyclerView
 
-    TextView date;                      // TextView to display current date
+    TextView tvNoData;
+
+    AdView adView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,25 +56,61 @@ public class DailyFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Get today's date formatted as dd/MM/yyyy
-        String todayDate = uiDateFormat.format(new Date());
-
-        // Initialize the TextView and set today's date
-        date = view.findViewById(R.id.date);
-        date.setText(todayDate);
-
         // Initialize RecyclerView and set a linear vertical layout manager
         rvTransactions = view.findViewById(R.id.rvTransactions);
         rvTransactions.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        adView = view.findViewById(R.id.adView);
+        if (adView != null) {
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+        }
+
+        adView.setAdListener(new AdListener() {
+            @Override
+            public void onAdFailedToLoad(LoadAdError adError) {
+                adView.postDelayed(() -> adView.loadAd(new AdRequest.Builder().build()), 5000);
+            }
+        });
+
+
+        tvNoData = view.findViewById(R.id.tvNoData);
 
         // Get the shared ViewModel instance to fetch today's expenses
         expenseViewModel = new ViewModelProvider(requireActivity()).get(ExpenseViewModel.class);
 
         // Observe changes in today's expenses from the database
         expenseViewModel.getTodayExpenses().observe(getViewLifecycleOwner(), allExpenses -> {
-            // Create and set adapter to populate RecyclerView with expenses
-            adapter = new ExpenseOverviewAdapter(getContext(), allExpenses, ExpenseOverviewAdapter.TYPE_FRAGMENT);
-            rvTransactions.setAdapter(adapter);
+            if (allExpenses == null || allExpenses.isEmpty()) {
+                tvNoData.setVisibility(View.VISIBLE);
+                rvTransactions.setVisibility(View.GONE);
+            } else {
+                tvNoData.setVisibility(View.GONE);
+                rvTransactions.setVisibility(View.VISIBLE);
+
+                // Create and set adapter to populate RecyclerView with expenses
+                adapter = new ExpenseOverviewAdapter(getContext(), allExpenses, ExpenseOverviewAdapter.TYPE_FRAGMENT);
+                rvTransactions.setAdapter(adapter);
+            }
         });
+    }
+
+    // AdView lifecycle handling to prevent leaks
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (adView != null) adView.pause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (adView != null) adView.resume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (adView != null) adView.destroy();
     }
 }

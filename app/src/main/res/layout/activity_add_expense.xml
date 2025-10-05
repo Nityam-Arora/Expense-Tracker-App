@@ -44,7 +44,6 @@
                 android:id="@+id/addAmountLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Amount"
                 android:textColorHint="#404040"
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusBottomEnd="12dp"
@@ -64,13 +63,28 @@
                     android:id="@+id/addAmount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="₹ "
                     android:inputType="number"
                     android:textColor="@color/black"
                     android:textStyle="bold"
                     android:textSize="22sp"
+                    android:maxLength="5"
+                    android:paddingStart="34dp"
                     />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/rsSymbol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₹"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:gravity="center_vertical"
+                app:layout_constraintStart_toStartOf="@id/addAmountLayout"
+                app:layout_constraintTop_toTopOf="@id/addAmountLayout"
+                app:layout_constraintBottom_toBottomOf="@id/addAmountLayout"
+                android:paddingStart="16dp"/>
                 
 <!--                Add Category-->
 

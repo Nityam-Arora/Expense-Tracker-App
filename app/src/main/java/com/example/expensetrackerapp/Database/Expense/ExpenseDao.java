@@ -60,22 +60,22 @@ public interface ExpenseDao {
      * Filters expenses from the last 7 days including today
      * @return LiveData list of weekly ExpenseEntity
      */
-    @Query("SELECT * FROM expenses WHERE date >= DATE('now', '-6 days', 'localtime') ORDER BY date DESC, time DESC")
-    LiveData<List<ExpenseEntity>> getWeeklyExpenses();
+    @Query("SELECT * FROM expenses WHERE date BETWEEN :startDate AND :endDate ORDER BY date DESC, time DESC")
+    LiveData<List<ExpenseEntity>> getWeeklyExpenses(String startDate, String endDate);
 
     /**
      * Retrieve this month's expenses
      * Filters expenses from the last 30 days including today
      * @return LiveData list of monthly ExpenseEntity
      */
-    @Query("SELECT * FROM expenses WHERE date >= DATE('now', '-29 days', 'localtime') ORDER BY date DESC, time DESC")
-    LiveData<List<ExpenseEntity>> getMonthlyExpenses();
 
+    @Query("SELECT * FROM expenses WHERE date BETWEEN :startDate AND :endDate ORDER BY date DESC, time DESC")
+    LiveData<List<ExpenseEntity>> getMonthlyExpenses(String startDate, String endDate);
     /**
      * Retrieve total expense amount grouped by category
-     * Only considers expenses from the last 7 days
+     * Considers the total amounts based on Start Date and End Date
      * @return LiveData list of CategoryTotal objects
      */
-    @Query("SELECT category, SUM(amount) AS total FROM expenses WHERE date >= DATE('now', '-6 days', 'localtime') GROUP BY category")
-    LiveData<List<CategoryTotal>> getCategoryTotal();
+    @Query("SELECT category, SUM(amount) AS total FROM expenses WHERE date BETWEEN :startDate AND :endDate GROUP BY category ORDER BY total DESC")
+    LiveData<List<CategoryTotal>> getCategoryTotal(String startDate, String endDate);
 }

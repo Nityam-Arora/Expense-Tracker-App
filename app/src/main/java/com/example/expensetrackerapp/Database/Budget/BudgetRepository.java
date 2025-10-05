@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.expensetrackerapp.Database.AppDatabase;
 
+import java.util.List;
 import java.util.concurrent.Executors;
 
 /**
@@ -43,5 +44,9 @@ public class BudgetRepository {
      */
     public LiveData<BudgetEntity> getLatestBudgetLive() {
         return budgetDao.getLatestBudgetLive();
+    }
+
+    public LiveData<List<BudgetEntity>> getAllBudget() {
+        return budgetDao.getAllBudget();
     }
 }

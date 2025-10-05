@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import java.util.List;
+
 /**
  * ViewModel class for managing Budget data.
  * - Acts as a bridge between the UI and the BudgetRepository.
@@ -41,4 +43,6 @@ public class BudgetViewModel extends AndroidViewModel {
     public void insert(BudgetEntity budgetEntity) {
         repository.insert(budgetEntity);
     }
+
+    public LiveData<List<BudgetEntity>> getAllBudget() { return repository.getAllBudget(); }
 }

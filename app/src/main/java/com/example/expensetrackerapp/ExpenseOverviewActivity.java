@@ -37,12 +37,7 @@ public class ExpenseOverviewActivity extends AppCompatActivity {
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         ViewPager2 viewPager2 = findViewById(R.id.viewPager);
 
-        addExpense.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ExpenseOverviewActivity.this, AddExpenseActivity.class));
-            }
-        });
+        addExpense.setOnClickListener(v -> startActivity(new Intent(ExpenseOverviewActivity.this, AddExpenseActivity.class)));
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(this);
         viewPager2.setAdapter(adapter);

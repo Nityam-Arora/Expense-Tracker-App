@@ -5,5 +5,12 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
+    <style name="Theme.ExpenseTrackerApp.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#D0D7D5</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="postSplashScreenTheme">@style/Theme.ExpenseTrackerApp</item>
+    </style>
+
+
     <style name="Theme.ExpenseTrackerApp" parent="Base.Theme.ExpenseTrackerApp" />
 </resources>
