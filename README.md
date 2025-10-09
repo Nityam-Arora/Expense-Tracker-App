@@ -58,16 +58,8 @@ The **BACHAT BUDDY** assists users in monitoring and managing their daily expens
 
 ### Installation
 
-1. Clone the repository:
 
-   ```bash
-   git clone https://github.com/Nityam-Arora/Expense-Tracker-App.git
-   ```
-2. Open the project in Android Studio.
-3. Build and run the app on an emulator or a physical device.
-
-
-- You can also [download the APK from Releases](https://github.com/Nityam-Arora/Expense-Tracker-App/releases/tag/v1.2.0)
+- [Download from Indus App Store](https://www.indusappstore.com/apps/finance/bachat-buddy/com.example.expensetrackerapp/?page=details&id=com.example.expensetrackerapp)
 
   
 ---
